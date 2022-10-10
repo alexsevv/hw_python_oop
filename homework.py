@@ -3,7 +3,7 @@ from dataclasses import dataclass, asdict
 
 @dataclass
 class InfoMessage:
-    # Информационное сообщение о тренировке.
+    """ Информационное сообщение о тренировке. """
     training_type: str
     duration: float
     distance: float
@@ -20,13 +20,13 @@ class InfoMessage:
     и округляем при выводе до тысячных долей с помощью
     format specifier (.3f)
     """
+
     def get_message(self) -> None:
-        t = asdict(self)
-        return self.MESSAGE.format(*t.values())
+        return self.MESSAGE.format(*asdict(self).values())
 
 
 class Training:
-    # Базовый класс тренировки.
+    """ Базовый класс тренировки. """
     M_IN_KM: int = 1000
     LEN_STEP: float = 0.65
     MINUT_IN_HOUR: int = 60
@@ -41,7 +41,7 @@ class Training:
         self.weight = weight
 
     def get_distance(self) -> float:
-        # Получаем дистанцию в км. action * LEN_STEP / M_IN_KM
+        """ Получаем дистанцию в км. action * LEN_STEP / M_IN_KM """
         return self.action * self.LEN_STEP / self.M_IN_KM
 
     def get_mean_speed(self) -> float:
@@ -52,13 +52,13 @@ class Training:
         return self.get_distance() / self.duration
 
     def get_spent_calories(self) -> float:
-        # Получить количество затраченных калорий.
+        """ Получить количество затраченных калорий. """
         raise NotImplementedError(
             'Определите get_spent_calories в %s.' %
             (self.__class__.__name__))
 
     def show_training_info(self) -> InfoMessage:
-        # Вернем информационное сообщение о выполненной тренировке.
+        """ Вернем информационное сообщение о выполненной тренировке. """
         return InfoMessage(
             type(self).__name__,
             self.duration,
@@ -69,7 +69,7 @@ class Training:
 
 
 class Running(Training):
-    # Тренировка: бег.
+    """ Тренировка: бег. """
     COEFF_CALORIE_1: int = 18
     COEFF_CALORIE_2: int = 20
 
@@ -89,7 +89,7 @@ class Running(Training):
 
 
 class SportsWalking(Training):
-    # Тренировка: спортивная ходьба.
+    """ Тренировка: спортивная ходьба. """
     COEFF_CALORIE_1: float = 0.035
     COEFF_CALORIE_2: int = 2
     COEFF_CALORIE_3: float = 0.029
@@ -121,7 +121,7 @@ class SportsWalking(Training):
 
 
 class Swimming(Training):
-    # Тренировка: плавание.
+    """ Тренировка: плавание. """
     LEN_STEP = 1.38
     COEFF_CALORIE_1: float = 1.1
     COEFF_CALORIE_2: int = 2
@@ -153,19 +153,19 @@ class Swimming(Training):
 
 
 def read_package(workout_type: str, data: list) -> Training:
-    # Прочитаем данные полученные от датчиков.
+    """ Прочитаем данные полученные от датчиков. """
     parameters_workout = {
         'SWM': Swimming,
         'RUN': Running,
         'WLK': SportsWalking}
     if workout_type in parameters_workout:
         return parameters_workout[workout_type](*data)
-    else:
+
         raise ValueError(f"Тренировка {workout_type} не найдена")
 
 
 def main(training: Training) -> None:
-    # Главная функция.
+    """ Главная функция. """
     info = training.show_training_info()
     print(info.get_message())
 
