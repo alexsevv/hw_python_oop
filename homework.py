@@ -161,7 +161,7 @@ def read_package(workout_type: str, data: list) -> Training:
     if workout_type in parameters_workout:
         return parameters_workout[workout_type](*data)
 
-        raise ValueError(f"Тренировка {workout_type} не найдена")
+    raise ValueError(f"Тренировка {workout_type} не найдена")
 
 
 def main(training: Training) -> None:
